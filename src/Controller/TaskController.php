@@ -4,32 +4,74 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use App\Repository\TaskRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class TaskController extends Controller
+class TaskController extends AbstractController
 {
-    /**
-     * @Route("/tasks", name="task_list")
-     */
-    public function listAction()
+    // Return the list of tasks
+    #[Route(path: '/tasks', name: 'task_list')]
+    #[IsGranted('ROLE_USER')]
+    public function listAction(
+        TaskRepository $repository,
+        Security $security
+    )
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App:Task')->findAll()]);
+        $user = $security->getUser();
+
+        if(in_array('ROLE_ADMIN', $user->getRoles()))
+        {
+            $tasks = $repository->findAllByAdmin($user);
+        }
+        else
+        {
+            $tasks = $repository->findAllByUser($user);
+        }
+
+        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
     }
 
-    /**
-     * @Route("/tasks/create", name="task_create")
-     */
-    public function createAction(Request $request)
+    // Return the list of completed tasks
+    #[Route(path: '/tasks/completed', name: 'done_task_list')]
+    #[IsGranted('ROLE_USER')]
+    public function listCompletedTask(
+        TaskRepository $repository,
+        Security $security
+    )
+    {
+        $user = $security->getUser();
+
+        if(in_array('ROLE_ADMIN', $user->getRoles()))
+        {
+            $tasks = $repository->findCompletedByAdmin($user);
+        }
+        else
+        {
+            $tasks = $repository->findCompletedByUser($user);
+        }
+
+        return $this->render('task/doneList.html.twig', ['tasks' => $tasks]); // TODO Créer la vue
+    }
+
+    // Create a new task
+    #[Route(path: '/tasks/create', name: 'task_create')]
+    #[IsGranted('ROLE_USER')]
+    public function createAction(
+        Request $request,
+        EntityManagerInterface $em
+    )
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $em->persist($task);
             $em->flush();
@@ -42,17 +84,23 @@ class TaskController extends Controller
         return $this->render('task/create.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/tasks/{id}/edit", name="task_edit")
-     */
-    public function editAction(Task $task, Request $request)
+    // Edit an existing task
+    #[Route(path: '/tasks/{id}/edit', name: 'task_edit')]
+    #[IsGranted('ROLE_USER')]
+    public function editAction(
+        Task $task,
+        Request $request,
+        EntityManagerInterface $em
+    )
     {
+        $autor = $task->getUser();
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $task->setUser($autor);
+            $em->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
@@ -65,25 +113,30 @@ class TaskController extends Controller
         ]);
     }
 
-    /**
-     * @Route("/tasks/{id}/toggle", name="task_toggle")
-     */
-    public function toggleTaskAction(Task $task)
+    // Validate task
+    #[Route(path: '/tasks/{id}/toggle', name: 'task_toggle')]
+    #[IsGranted('ROLE_USER')]
+    public function toggleTaskAction(
+        Task $task,
+        EntityManagerInterface $em
+    )
     {
         $task->toggle(!$task->isDone());
-        $this->getDoctrine()->getManager()->flush();
+        $em->flush();
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
         return $this->redirectToRoute('task_list');
     }
 
-    /**
-     * @Route("/tasks/{id}/delete", name="task_delete")
-     */
-    public function deleteTaskAction(Task $task)
+    // Delete task
+    #[Route(path: '/tasks/{id}/delete', name: 'task_delete')]
+    #[IsGranted('ROLE_USER')]
+    public function deleteTaskAction(
+        Task $task,
+        EntityManagerInterface $em
+    )
     {
-        $em = $this->getDoctrine()->getManager();
         $em->remove($task);
         $em->flush();
 

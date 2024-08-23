@@ -1,5 +1,15 @@
 <?php
 
+use App\Kernel;
+
+require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+
+return function (array $context) {
+    return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+};
+
+// TODO Vérifier ce que je fais de ce fichier
+/*
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 
@@ -18,7 +28,7 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
     exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
 }
 
-/** @var \Composer\Autoload\ClassLoader $loader */
+/** @var \Composer\Autoload\ClassLoader $loader *//*
 $loader = require __DIR__.'/../app/autoload.php';
 Debug::enable();
 
@@ -28,3 +38,4 @@ $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
+*/
