@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class UserType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('username', TextType::class, [
@@ -38,10 +38,10 @@ class UserType extends AbstractType
                     'Utilisateur' => 'ROLE_USER',
                     'Administrateur' => 'ROLE_ADMIN',
                 ],
-                'expanded' => true,  // Afficher les choix sous forme de cases à cocher
-                'multiple' => true,  // Permettre la sélection multiple
+                'expanded' => true,
+                'multiple' => true,
                 'label' => 'Rôle',
-                'required' => true,  // Rendre ce champ requis
+                'required' => true,
                 'attr' => [
                     'class' => 'form-check-input'
                 ],

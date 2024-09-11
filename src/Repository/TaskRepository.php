@@ -62,18 +62,28 @@ class TaskRepository extends ServiceEntityRepository
             ;
         }
         
-        /**
-         * @return Task[] Returns an array of Task objects
-         */
-        public function findCompletedByUser(User $user): array
-        {
-            return $this->createQueryBuilder('t')
-            ->andWhere('t.user = :user')
-            ->setParameter('user', $user)
-            ->andWhere('t.isDone = 1')
-            ->orderBy('t.id', 'ASC')
-            ->getQuery()
-            ->getResult()
+    /**
+     * @return Task[] Returns an array of Task objects
+     */
+    public function findCompletedByUser(User $user): array
+    {
+        return $this->createQueryBuilder('t')
+        ->andWhere('t.user = :user')
+        ->setParameter('user', $user)
+        ->andWhere('t.isDone = 1')
+        ->orderBy('t.id', 'ASC')
+        ->getQuery()
+        ->getResult()
+        ;
+    }
+
+    public function findLastTask(): ?Task
+    {
+        return $this->createQueryBuilder('t')
+        ->orderBy('t.id', 'desc')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult()
         ;
     }
 }

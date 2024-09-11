@@ -22,7 +22,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 25)]
-    // #[Assert\Unique]
     #[Assert\NotBlank(message: "Vous devez saisir un nom d'utilisateur.")]
     private ?string $username = null;
 
@@ -30,7 +29,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(type: 'string', length: 60)]
-    // #[Assert\Unique]
     #[Assert\NotBlank(message: "Vous devez saisir une adresse email.")]
     #[Assert\Email(message: "Le format de l'adresse n'est pas correcte.")]
     private ?string $email = null;

@@ -40,12 +40,9 @@ class UserController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            // TODO tester le hash du mdp
-            dump($form->get('password')->getData());
+        if ($form->isSubmitted() && $form->isValid()) 
+        {
             $hashPassword = $userPasswordHasher->hashPassword($user, $form->get('password')->getData());
-            dd($hashPassword);
             $user->setPassword($hashPassword);
 
             $em->persist($user);
@@ -54,9 +51,6 @@ class UserController extends AbstractController
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
             return $this->redirectToRoute('user_list');
-        }
-        if ($form->isSubmitted() && !$form->isValid()) {
-            dump($form);
         }
 
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
@@ -72,18 +66,13 @@ class UserController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher
     )
     {
-        $form = $this->createForm(UserType::class, $user, [
-            'submit_label' => 'Modifier l\'utilisateur'
-        ]);
+        $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-
-            // TODO tester le hash du mdp
-            dump($form->get('password')->getData());
+        if ($form->isSubmitted() && $form->isValid()) 
+        {
             $hashPassword = $userPasswordHasher->hashPassword($user, $form->get('password')->getData());
-            dd($hashPassword);
             $user->setPassword($hashPassword);
 
             $em->flush();
