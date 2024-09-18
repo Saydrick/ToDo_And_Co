@@ -76,14 +76,4 @@ class TaskRepository extends ServiceEntityRepository
         ->getResult()
         ;
     }
-
-    public function findLastTask(): ?Task
-    {
-        return $this->createQueryBuilder('t')
-        ->orderBy('t.id', 'desc')
-        ->setMaxResults(1)
-        ->getQuery()
-        ->getOneOrNullResult()
-        ;
-    }
 }

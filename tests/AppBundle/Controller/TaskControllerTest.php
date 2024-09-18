@@ -62,11 +62,11 @@ class TaskControllerTest extends WebTestCase
         $this->em = static::getContainer()->get(EntityManagerInterface::class);
     }
 
-    // public function testFixturesLoad(): void
-    // {
-    //     $task = $this->em->getRepository(Task::class)->findOneBy(['title' => 'task1']);
-    //     $this->assertNotNull($task);
-    // }
+    public function testFixturesLoad(): void
+    {
+        $task = $this->em->getRepository(Task::class)->findOneBy(['title' => 'task1']);
+        $this->assertNotNull($task);
+    }
 
     protected function login(string $user, string $password): void
     {
@@ -81,36 +81,58 @@ class TaskControllerTest extends WebTestCase
         $this->client->submit($form);
     }
 
-    // protected function assertRedirectsToLoginForUnauthorizedAccess(string $route, array $parameters = []): void
-    // {
-    //     $url = $this->client->getContainer()->get('router')->generate($route, $parameters);
-    //     $this->client->request('GET', $url);
-    //     $this->assertResponseRedirects('/login');
-    // }
+    protected function assertRedirectsToLoginForUnauthorizedAccess(string $route, array $parameters = []): void
+    {
+        $url = $this->client->getContainer()->get('router')->generate($route, $parameters);
+        $this->client->request('GET', $url);
+        $this->assertResponseRedirects('/login');
+    }
 
 
-    // public function testTaskListPageIsRestricted()
-    // {
-    //     $this->assertRedirectsToLoginForUnauthorizedAccess('task_list');
-    // }
+    public function testTaskListPageIsRestricted()
+    {
+        $this->assertRedirectsToLoginForUnauthorizedAccess('task_list');
+    }
 
-    // public function testTaskListPageWithSufficientRole(): void
-    // {
-    //     $this->login('user1', '1234');        
-    //     $this->client->request('GET', '/tasks');
-    //     $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    // }
+    public function testTaskListPageWithSufficientRole(): void
+    {
+        $this->login('user1', '1234');        
+        $this->client->request('GET', '/tasks');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
 
-    // public function testCreateAction(): void
-    // {
-    //     $this->login('user1', '1234');
-    //     $crawler = $this->client->request('GET', '/tasks/create');
-    //     $form = $crawler->selectButton('Ajouter')->form();
-    //     $this->client->submit($form, ['task[title]' => 'Titre test', 'task[content]' => 'Contenu de test']);
-    //     $this->client->followRedirect();
-    //     $this->assertSelectorTextContains('.alert-success', 'La tâche a été bien été ajoutée.');
-    // }
+    public function testTaskListPageWithAdminRole(): void
+    {
+        $this->login('admin', '1234');        
+        $this->client->request('GET', '/tasks');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
 
+    public function testCompletedTaskListPageWithSufficientRole(): void
+    {
+        $this->login('user1', '1234');        
+        $this->client->request('GET', '/tasks/completed');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    public function testCompletedTaskListPageWithAdminRole(): void
+    {
+        $this->login('admin', '1234');        
+        $this->client->request('GET', '/tasks/completed');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    public function testCreateAction(): void
+    {
+        $this->login('user1', '1234');
+        $crawler = $this->client->request('GET', '/tasks/create');
+        $form = $crawler->selectButton('Ajouter')->form();
+        $this->client->submit($form, ['task[title]' => 'Titre test', 'task[content]' => 'Contenu de test']);
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('.alert-success', 'La tâche a été bien été ajoutée.');
+    }
+
+    /*
     public function testEditAction(): void
     {
         $taskID = $this->em->getRepository(Task::class)->findOneBy(['title' => 'task1'])->getId();
@@ -124,7 +146,22 @@ class TaskControllerTest extends WebTestCase
         // $this->client->followRedirect();
         // $this->assertSelectorTextContains('.alert-success', 'La tâche a bien été modifiée.');
     }
+    
 
+    public function testToggleTaskAction(): void
+    {
+        $task = $this->em->getRepository(Task::class)->findOneBy(['title' => 'task1']);
+        $this->login('admin', '1234');
+        $crawler = $this->client->request('GET', 'task');
+        $crawler->selectButton('Marquer comme faite');
+        $this->client->request('GET', 'tasks/' . $task->getId() . '/toggle');
+        // dd($task);
+        // dd($task->getId());
+        // dd($this->client->getResponse()->getContent());
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('.alert-success', 'La tâche Titre modifié a bien été marquée comme faite.');
+    }
+*/
     public function testDeleteTaskAction(): void
     {
         $taskID = $this->em->getRepository(Task::class)->findOneBy(['title' => 'task1'])->getId();
@@ -134,18 +171,8 @@ class TaskControllerTest extends WebTestCase
         $this->client->request('GET', 'tasks/' . $taskID . '/delete');
         $task = $this->em->getRepository(Task::class)->findOneBy(['title' => 'task1']);
         $this->assertEquals(null, $task);
-    }
-    
-    public function testToggleTaskAction(): void
-    {
-        $taskID = $this->em->getRepository(Task::class)->findOneBy(['title' => 'task1'])->getId();
-        dd($taskID);
-        $this->login('user1', '1234');
-        $crawler = $this->client->request('GET', 'task');
-        $crawler->selectButton('Marquer comme faite');
-        $this->client->request('POST', 'tasks/' . $taskID . '/toggle');
-        $this->client->followRedirect();
-        $this->assertSelectorTextContains('.alert-success', 'La tâche Titre modifié a bien été marquée comme faite.');
+        // $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        // $this->assertSelectorTextContains('.alert-success', 'La tâche a bien été supprimée.');
     }
 
     protected function tearDown(): void

@@ -17,21 +17,6 @@ class UserRepository extends ServiceEntityRepository
     }
 
 
-    /**
-    * @return User[] Returns an array of User objects
-    */
-
-
-    public function findOneByID(User $userID): User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.id = :val')
-            ->setParameter('val', $userID)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-
     public function findOneByUsername(string $username): User
     {
         return $this->createQueryBuilder('u')

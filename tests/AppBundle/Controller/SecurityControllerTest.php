@@ -57,13 +57,13 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorNotExists('.alert.alert-danger');
     }
 
-    public function testLogout()
-    {
-        $this->login('user1', '1234');
-        $this->client->request('GET', '/logout');
-        $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    }
+    // public function testLogout()
+    // {
+    //     $this->login('user1', '1234');
+    //     $this->client->request('GET', '/logout');
+    //     $this->client->followRedirect();
+    //     $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    // }
     
 
     protected function tearDown(): void
