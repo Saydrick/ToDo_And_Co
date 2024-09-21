@@ -15,7 +15,7 @@ class Task
     #[ORM\Column]
     private ?int $id = null;
 
-    
+
     #[ORM\Column]
     private ?\DateTime $createdAt = null;
 

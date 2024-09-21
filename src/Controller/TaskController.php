@@ -20,16 +20,12 @@ class TaskController extends AbstractController
     public function listAction(
         TaskRepository $repository,
         Security $security
-    )
-    {
+    ) {
         $user = $security->getUser();
 
-        if(in_array('ROLE_ADMIN', $user->getRoles()))
-        {
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
             $tasks = $repository->findAllByAdmin($user);
-        }
-        else
-        {
+        } else {
             $tasks = $repository->findAllByUser($user);
         }
 
@@ -42,16 +38,12 @@ class TaskController extends AbstractController
     public function listCompletedTask(
         TaskRepository $repository,
         Security $security
-    )
-    {
+    ) {
         $user = $security->getUser();
 
-        if(in_array('ROLE_ADMIN', $user->getRoles()))
-        {
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
             $tasks = $repository->findCompletedByAdmin($user);
-        }
-        else
-        {
+        } else {
             $tasks = $repository->findCompletedByUser($user);
         }
 
@@ -64,15 +56,13 @@ class TaskController extends AbstractController
     public function createAction(
         Request $request,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $em->persist($task);
             $em->flush();
 
@@ -91,8 +81,7 @@ class TaskController extends AbstractController
         Task $task,
         Request $request,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $autor = $task->getUser();
         $form = $this->createForm(TaskType::class, $task);
 
@@ -119,8 +108,7 @@ class TaskController extends AbstractController
     public function toggleTaskAction(
         Task $task,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $task->toggle(!$task->isDone());
         $em->flush();
 
@@ -135,8 +123,7 @@ class TaskController extends AbstractController
     public function deleteTaskAction(
         Task $task,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $em->remove($task);
         $em->flush();
 

@@ -60,8 +60,8 @@ class TaskRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
             ;
-        }
-        
+    }
+
     /**
      * @return Task[] Returns an array of Task objects
      */
