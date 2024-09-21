@@ -24,14 +24,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    // Check login credentials
-    #[Route(path: '/login_check', name: 'login_check')]
-    public function loginCheck()
-    {
-        // This code is never executed.
-    }
-
-    // TODO COMMENT
+    
     #[Route(path: '/logout', name: 'logout')]
     public function logoutCheck()
     {

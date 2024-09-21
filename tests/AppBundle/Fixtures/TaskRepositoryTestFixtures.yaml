@@ -1,0 +1,9 @@
+include:
+  - UserRepositoryTestFixtures.yaml
+
+App\Entity\Task:
+  task{1..15}:
+    title: task<current()>
+    content: contenu de la tache <current()>
+    createdAt: <date_create()>
+    user: <randomElement(@user{1..10})>

@@ -1,0 +1,12 @@
+App\Entity\User:
+  user_admin:
+    username: 'admin'
+    password: '\$2y\$10\$tat2CgjHs/4CauQUj4qnmu7xakTr5uu7bPduC12WdHTQoDNsAa2lK'
+    email: 'admin\@todo.com'
+    roles: ['ROLE_ADMIN']
+
+  user{1..10}:
+    username: user<current()>
+    password: '\$2y\$10\$tat2CgjHs/4CauQUj4qnmu7xakTr5uu7bPduC12WdHTQoDNsAa2lK'
+    email: user<current()>\@todo.com
+    roles: ['ROLE_USER']

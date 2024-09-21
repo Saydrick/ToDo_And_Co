@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DefaultController extends AbstractController
 {
-    // TODO COMMENT
+    // Display the homepage
     #[Route(path: "/", name: "homepage")]
     public function indexAction()
     {
