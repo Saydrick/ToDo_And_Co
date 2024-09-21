@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -50,7 +51,7 @@ class Task
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt): static
+    public function setCreatedAt(DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
 
@@ -62,7 +63,7 @@ class Task
         return $this->title;
     }
 
-    public function setTitle($title): static
+    public function setTitle(string $title): static
     {
         $this->title = $title;
 
@@ -74,7 +75,7 @@ class Task
         return $this->content;
     }
 
-    public function setContent($content): static
+    public function setContent(string $content): static
     {
         $this->content = $content;
 
@@ -86,7 +87,7 @@ class Task
         return $this->isDone;
     }
 
-    public function toggle($flag): void
+    public function toggle(bool $flag): void
     {
         $this->isDone = $flag;
     }
