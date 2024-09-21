@@ -5,12 +5,9 @@ namespace Tests\App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
-// use Tests\App\Traits\LoginTrait;
 
 class SecurityControllerTest extends WebTestCase
-{    
-    // use LoginTrait;
-
+{
     private $client;
     private $databaseTool;
 
@@ -43,7 +40,6 @@ class SecurityControllerTest extends WebTestCase
 
     public function testLoginWithBadCredentials()
     {
-        // $this->login('user1', 'badpassword', $this->client, $this->databaseTool);
         $this->login('user1', 'badpassword');
         $this->assertResponseRedirects('/login');
         $this->client->followRedirect();
@@ -56,14 +52,6 @@ class SecurityControllerTest extends WebTestCase
         $this->client->followRedirect();
         $this->assertSelectorNotExists('.alert.alert-danger');
     }
-
-    // public function testLogout()
-    // {
-    //     $this->login('user1', '1234');
-    //     $this->client->request('GET', '/logout');
-    //     $this->client->followRedirect();
-    //     $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-    // }
     
 
     protected function tearDown(): void

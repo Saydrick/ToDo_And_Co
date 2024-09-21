@@ -55,7 +55,7 @@ class TaskController extends AbstractController
             $tasks = $repository->findCompletedByUser($user);
         }
 
-        return $this->render('task/doneList.html.twig', ['tasks' => $tasks]); // TODO Créer la vue
+        return $this->render('task/doneList.html.twig', ['tasks' => $tasks]);
     }
 
     // Create a new task

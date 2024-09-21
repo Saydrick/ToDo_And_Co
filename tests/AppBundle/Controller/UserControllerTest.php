@@ -3,7 +3,6 @@
 namespace Tests\App\Controller;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -11,24 +10,6 @@ use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 
 class UserControllerTest extends WebTestCase
 {
-    /**
-     *  listAction : liste des users (admin)
-     *      -> redirige vers la page si admin (admin = success 200 | user = error 403)
-     *      -> récupère la liste des users
-     *      -> Affiche le template
-     * 
-     *  createAction : add user
-     *      -> affiche le formulaire
-     *      -> mauvaise saisie = error
-     *      -> bonne saisie = redirect + success + (save bdd ?)
-     * 
-     *  editAction : modification d'un user
-     *      -> affiche le formulaire
-     *      -> mauvaise saisie = error
-     *      -> bonne saisie = redirect + success + (update bdd ?)
-     * 
-     */
-
     private $client;
     private $databaseTool;
     private $em;
@@ -67,7 +48,6 @@ class UserControllerTest extends WebTestCase
         $this->login('user1', '1234');
         $url = $this->client->getContainer()->get('router')->generate($route, $parameters);
         $this->client->request('GET', $url);
-        // dd($url);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -86,11 +66,6 @@ class UserControllerTest extends WebTestCase
     {
         $this->assertForbiddenResponseForNonAdminUser('user_list');
         $this->assertForbiddenResponseForNonAdminUser('user_create');
-
-        // $user = $this->em->getRepository(User::class)->findOneByUsername('user1');
-        // $userId = $user->getId();
-        // dd($userId);
-        // $this->assertForbiddenResponseForNonAdminUser('user_edit', ['id' => $userId]);
     }
 
     public function testUserListPageWithSufficientRole()
