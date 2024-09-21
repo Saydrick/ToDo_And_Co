@@ -7,8 +7,8 @@ Merci de contribuer à ce projet ! Ce guide détaille les étapes à suivre pour
 1. **Fork du projet** : 
    - Forkez le projet sur GitHub et clonez-le sur votre machine locale :
      ```bash
-     git clone https://github.com/username/nom-du-projet.git
-     cd nom-du-projet
+     git clone https://github.com/Saydrick/ToDo_And_Co.git
+     cd ToDo_And_Co
      ```
 2. **Création d’une branche** :
    - Utilisez des noms de branches explicites basés sur la tâche ou l’issue. Par exemple :
@@ -27,7 +27,7 @@ Merci de contribuer à ce projet ! Ce guide détaille les étapes à suivre pour
    - Vérifiez que vos modifications n’introduisent pas de régressions en ajoutant des **tests unitaires** et **fonctionnels** avec **PHPUnit**.
    - Pour exécuter les tests localement :
      ```bash
-     ./bin/phpunit
+     vendor/bin/phpunit
      ```
 
 5. **Soumettre une Pull Request (PR)** :
