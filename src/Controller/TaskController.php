@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -20,7 +21,7 @@ class TaskController extends AbstractController
     public function listAction(
         TaskRepository $repository,
         Security $security
-    ) {
+    ): Response {
         $user = $security->getUser();
 
         if (in_array('ROLE_ADMIN', $user->getRoles())) {
@@ -38,7 +39,7 @@ class TaskController extends AbstractController
     public function listCompletedTask(
         TaskRepository $repository,
         Security $security
-    ) {
+    ): Response {
         $user = $security->getUser();
 
         if (in_array('ROLE_ADMIN', $user->getRoles())) {
@@ -56,7 +57,7 @@ class TaskController extends AbstractController
     public function createAction(
         Request $request,
         EntityManagerInterface $em
-    ) {
+    ): Response {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
 
@@ -81,7 +82,7 @@ class TaskController extends AbstractController
         Task $task,
         Request $request,
         EntityManagerInterface $em
-    ) {
+    ): Response {
         $autor = $task->getUser();
         $form = $this->createForm(TaskType::class, $task);
 
@@ -108,7 +109,7 @@ class TaskController extends AbstractController
     public function toggleTaskAction(
         Task $task,
         EntityManagerInterface $em
-    ) {
+    ): Response {
         $task->toggle(!$task->isDone());
         $em->flush();
 
@@ -123,7 +124,7 @@ class TaskController extends AbstractController
     public function deleteTaskAction(
         Task $task,
         EntityManagerInterface $em
-    ) {
+    ): Response {
         $em->remove($task);
         $em->flush();
 

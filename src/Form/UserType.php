@@ -31,7 +31,6 @@ class UserType extends AbstractType
                 'required' => true,
                 'first_options'  => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Tapez le mot de passe à nouveau'],
-                'required' => true,
             ])
             ->add('roles', ChoiceType::class, [
                 'choices'  => [

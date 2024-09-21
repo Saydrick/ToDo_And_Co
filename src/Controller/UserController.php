@@ -7,6 +7,7 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +20,7 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function listAction(
         UserRepository $repository
-    ) {
+    ): Response {
         $users = $repository->findAll();
 
         return $this->render('user/list.html.twig', ['users' => $users]);
@@ -32,7 +33,7 @@ class UserController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         UserPasswordHasherInterface $userPasswordHasher
-    ) {
+    ): Response {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
@@ -61,7 +62,7 @@ class UserController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         UserPasswordHasherInterface $userPasswordHasher
-    ) {
+    ): Response {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
