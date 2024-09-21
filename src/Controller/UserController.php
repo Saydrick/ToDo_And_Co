@@ -19,8 +19,7 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function listAction(
         UserRepository $repository
-    )
-    {
+    ) {
         $users = $repository->findAll();
 
         return $this->render('user/list.html.twig', ['users' => $users]);
@@ -33,15 +32,13 @@ class UserController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         UserPasswordHasherInterface $userPasswordHasher
-    )
-    {
+    ) {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) 
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $hashPassword = $userPasswordHasher->hashPassword($user, $form->get('password')->getData());
             $user->setPassword($hashPassword);
 
@@ -64,14 +61,12 @@ class UserController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         UserPasswordHasherInterface $userPasswordHasher
-    )
-    {
+    ) {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) 
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $hashPassword = $userPasswordHasher->hashPassword($user, $form->get('password')->getData());
             $user->setPassword($hashPassword);
 

@@ -13,8 +13,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'login')]
     public function loginAction(
         AuthenticationUtils $authenticationUtils
-    )
-    {
+    ) {
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
@@ -24,7 +23,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    
+
     #[Route(path: '/logout', name: 'logout')]
     public function logoutCheck()
     {
