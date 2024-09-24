@@ -6,10 +6,14 @@
 {% block body %}
     <div class="row">
         {{ form_start(form) }}
-            {{ form_row(form.username) }}
-            {{ form_row(form.email) }}
-            {{ form_row(form.password) }}
-            {{ form_row(form.roles) }}
+            {{ form_row(form.username, { 'label': 'Nom d\'utilisateur' }) }}
+            <br>
+            {{ form_row(form.email, { 'label': 'Email' }) }}
+            <br>
+            {{ form_row(form.password, { 'label': 'Mot de passe' }) }}
+            <br>
+            {{ form_row(form.roles, { 'label': 'Rôles' }) }}
+            <br>
 
             <button type="submit" class="btn btn-success pull-right">Modifier</button>
         {{ form_end(form) }}
