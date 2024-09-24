@@ -20,29 +20,31 @@ class TaskRepository extends ServiceEntityRepository
     /**
     * @return Task[] Returns an array of Task objects
     */
-    public function findAllByAdmin(User $user): array
+    public function findNotCompletedByAdmin(User $user): array
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.user = :user')
             ->orWhere('t.user = 3')
+            ->andWhere('t.isDone = 0')
             ->setParameter('user', $user)
             ->orderBy('t.id', 'ASC')
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
 
     /**
-    * @return Task[] Returns an array of Task objects
-    */
-    public function findAllByUser(User $user): array
+     * @return Task[] Returns an array of Task objects
+     */
+    public function findNotCompletedByUser(User $user): array
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.user = :user')
-            ->setParameter('user', $user)
-            ->orderBy('t.id', 'ASC')
-            ->getQuery()
-            ->getResult()
+        ->andWhere('t.user = :user')
+        ->setParameter('user', $user)
+        ->andWhere('t.isDone = 0')
+        ->orderBy('t.id', 'ASC')
+        ->getQuery()
+        ->getResult()
         ;
     }
 

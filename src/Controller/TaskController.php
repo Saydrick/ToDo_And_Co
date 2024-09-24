@@ -25,9 +25,9 @@ class TaskController extends AbstractController
         $user = $security->getUser();
 
         if (in_array('ROLE_ADMIN', $user->getRoles())) {
-            $tasks = $repository->findAllByAdmin($user);
+            $tasks = $repository->findNotCompletedByAdmin($user);
         } else {
-            $tasks = $repository->findAllByUser($user);
+            $tasks = $repository->findNotCompletedByUser($user);
         }
 
         return $this->render('task/list.html.twig', ['tasks' => $tasks]);
